@@ -4718,7 +4718,7 @@
             </div>
 
             <div class="top-act__user">
-                <img src="./assets/img/avatar.jpg" alt="" class="top-act__avatar" />
+                <img src="./assets/img/chatbot.jpg" alt="" class="top-act__avatar" />
 
                 <!-- Dropdown -->
                 <div class="act-dropdown top-act__dropdown">
@@ -4763,3 +4763,12 @@
         </div>
     </div>
 </div>
+
+<script>
+  // Get the value from localStorage
+  const username = localStorage.getItem('username');
+
+  // Display it
+  document.getElementById('output').innerText = `Hello, ${username}!`
+</script>
+

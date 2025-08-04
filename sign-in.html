@@ -119,7 +119,8 @@
                         const token = data.token;
                         localStorage.setItem('token', token);
                         localStorage.setItem('user_id', data.user.id);
-                        document.getElementById('username').innerText = data.user.username;
+                        localStorage.setItem('username', data.user.username);
+                        document.getElementById('username').innerText = data.user.email;
                         window.location.href = './index-logined.html';
                     } else {
                         // Handle error (e.g., show error message)
