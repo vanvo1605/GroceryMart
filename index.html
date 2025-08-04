@@ -476,13 +476,71 @@
                         </article>
                     </div>
                 </div>
+                <div class="modal modal--small">
+                    <input type="text" id="msgInput" />
+                    <button onclick="sendMessage()">Send</button>
+                <div id="response"></div>
+            </div>
             </section>
         </main>
+
+        <!-- Chat Button -->
+        <div id="chat-toggle" onclick="toggleChat()">
+        💬 Chat
+        </div>
+
+        <!-- Chat Box -->
+        <div id="chat-box">
+        <div class="chat-header">Support Bot</div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <input type="text" id="chat-input" placeholder="Type your message..." onkeydown="sendOnEnter(event)">
+        </div>
 
         <!-- Footer -->
         <footer id="footer" class="footer"></footer>
         <script>
-            load("#footer", "./templates/footer.html");
+        load("#footer", "./templates/footer.html");
+
+        // Chatbot
+        function toggleChat() {
+        const box = document.getElementById('chat-box');
+        box.style.display = box.style.display === 'none' || box.style.display === '' ? 'flex' : 'none';
+        }
+
+        async function sendOnEnter(event) {
+            if (event.key === 'Enter') {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (message) {
+                const messages = document.getElementById('chat-messages');
+                const userMsg = document.createElement('div');
+                userMsg.className = "user-message";
+                userMsg.textContent = '🧑 You: ' + message;
+                messages.appendChild(userMsg);
+                input.value = '';
+
+                // Send message to AI Agent
+                const res = await fetch('https://vanscorner.duckdns.org/n8n/webhook/chatbot', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    "Access-Control-Allow-Origin": "*"
+                 },
+                body: JSON.stringify({ "chatInput": message})
+                });
+
+                const data = await res.json();
+                console.log(data);
+                
+                const botMsg = document.createElement('div');
+                botMsg.className = "bot-message";
+                botMsg.textContent = '🤖 Bot: ' + (data.answer || data.output || 'Sorry! Please try again later!');
+                messages.appendChild(botMsg);
+                messages.scrollTop = messages.scrollHeight; // Scroll to the bottom
+
+            }
+            }
+        }
         </script>
     </body>
 </html>
